@@ -1,13 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-if (typeof document !== 'undefined') {
-  var MediumEditor = require('medium-editor');
+if (typeof document !== "undefined") {
+  var MediumEditor = require("medium-editor");
 }
 
 export default class ReactMediumEditor extends React.Component {
   static defaultProps = {
-    tag: 'div'
+    tag: "div"
   };
 
   constructor(props) {
@@ -19,16 +19,17 @@ export default class ReactMediumEditor extends React.Component {
   }
 
   componentDidMount() {
-    const dom = ReactDOM.findDOMNode(this);
+    this.dom = ReactDOM.findDOMNode(this);
 
-    this.medium = new MediumEditor(dom, this.props.options);
-    this.medium.subscribe('editableInput', e => {
+    this.medium = new MediumEditor(this.dom, this.props.options);
+    this.medium.subscribe("editableInput", e => {
       this._updated = true;
-      this.change(dom.innerHTML);
+      this.change(this.dom.innerHTML);
     });
   }
 
   componentDidUpdate() {
+    this.medium.checkContentChanged(this.dom);
     this.medium.restoreSelection();
   }
 
